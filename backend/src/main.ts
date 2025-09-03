@@ -18,7 +18,13 @@ async function bootstrap() {
   
   console.log('✅ All required environment variables are set');
   console.log('🌍 Environment:', process.env.NODE_ENV || 'development');
-  console.log('🗄️ Database:', process.env.DATABASE_URL ? 'PostgreSQL' : 'SQLite');
+  
+  if (process.env.DATABASE_URL) {
+    console.log('🗄️ Database: PostgreSQL');
+    console.log('🔗 Database URL:', process.env.DATABASE_URL.substring(0, 20) + '...');
+  } else {
+    console.log('🗄️ Database: SQLite');
+  }
 
   // CORS 설정
   app.enableCors({
