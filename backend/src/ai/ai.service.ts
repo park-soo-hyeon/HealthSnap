@@ -46,7 +46,7 @@ export class AiService {
   private nutritionData: NutritionData[] = [];
 
   constructor() {
-    const apiKey = process.env.GEMINI_API_KEY || 'AIzaSyBC3F8_08pzVMppXQ-5AF9kSwV9vqFuxkQ';
+    const apiKey = process.env.GEMINI_API_KEY;
     this.genAI = new GoogleGenerativeAI(apiKey);
     this.loadNutritionData();
   }

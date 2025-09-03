@@ -186,7 +186,7 @@ const LoginPage = () => {
     setMessage({ type: '', text: '' });
 
     try {
-      const response = await fetch('http://localhost:3000/auth/login', {
+      const response = await fetch(`${process.env.API_BASE_URL || 'https://healthsnap-5stc.onrender.com'}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -243,7 +243,7 @@ const LoginPage = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:3000/auth/register', {
+      const response = await fetch(`${process.env.API_BASE_URL || 'https://healthsnap-5stc.onrender.com'}/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -397,12 +397,12 @@ const InputPage = () => {
       setIsLoading(true);
       
       try {
-        // 로그인 상태에 따라 다른 API 엔드포인트 사용
-        const endpoint = isAuthenticated() 
-          ? 'http://localhost:3000/Ai/db'      // 로그인: DB 저장
-          : 'http://localhost:3000/Ai/analyze'; // 비로그인: 분석만
+        // API 엔드포인트 결정
+        const apiEndpoint = isAuthenticated() 
+          ? `${process.env.API_BASE_URL || 'https://healthsnap-5stc.onrender.com'}/Ai/db`      // 로그인: DB 저장
+          : `${process.env.API_BASE_URL || 'https://healthsnap-5stc.onrender.com'}/Ai/analyze`; // 비로그인: 분석만
         
-        const response = await fetch(endpoint, {
+        const response = await fetch(apiEndpoint, {
           method: 'POST',
           headers: isAuthenticated() ? getAuthHeaders() : { 'Content-Type': 'application/json' },
           body: JSON.stringify(backendData),
