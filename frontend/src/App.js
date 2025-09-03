@@ -1055,7 +1055,7 @@ const Footer = () => {
 function App() {
   return (
     <AuthProvider>
-      <Router>
+      <Router basename="/HealthSnap">
         <div className="appContainer">
           <GlobalStyles />
           <Header />
