@@ -22,9 +22,9 @@ import { User } from './users/entities/user.entity';
             type: 'postgres',
             url: process.env.DATABASE_URL,
             autoLoadEntities: true,
-            synchronize: false, // 프로덕션에서는 false 권장
+            synchronize: true, // 첫 배포 시 테이블 생성 (임시)
             ssl: { rejectUnauthorized: false }, // Neon SSL 설정
-            logging: false,
+            logging: true, // 테이블 생성 과정 확인
           };
         } else {
           // 개발/로컬: SQLite
