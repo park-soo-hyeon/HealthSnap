@@ -8,7 +8,7 @@ export default defineConfig({
     open: false,
   },
   output: {
-    // HashRouter 사용으로 단순화
+    // 도메인 사용으로 단순화
     distPath: {
       root: 'dist',
       js: 'assets/js',
