@@ -1053,6 +1053,13 @@ const Footer = () => {
 };
 
 function App() {
+  // HTTPS 강제 리다이렉트
+  React.useEffect(() => {
+    if (window.location.protocol === 'http:' && window.location.hostname !== 'localhost') {
+      window.location.href = window.location.href.replace('http:', 'https:');
+    }
+  }, []);
+
   return (
     <AuthProvider>
       <Router>
