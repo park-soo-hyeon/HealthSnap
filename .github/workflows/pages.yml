@@ -36,7 +36,6 @@ jobs:
           npm run build
         env:
           API_BASE_URL: https://healthsnap-5stc.onrender.com
-          PUBLIC_URL: /HealthSnap
           
       - name: Verify build output
         run: |
@@ -59,9 +58,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-        
-      - name: Verify deployment
-        run: |
-          echo "Deployment completed to: ${{ steps.deployment.outputs.page_url }}"
-          echo "Waiting for deployment to be available..."
-          sleep 30

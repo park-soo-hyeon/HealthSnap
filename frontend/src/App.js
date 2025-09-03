@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import InputPage from './InputPage';
 import ResultPage from './ResultPage';
 import Mypage from './MyPage';
@@ -1055,7 +1055,7 @@ const Footer = () => {
 function App() {
   return (
     <AuthProvider>
-      <Router basename="/HealthSnap">
+      <Router>
         <div className="appContainer">
           <GlobalStyles />
           <Header />
