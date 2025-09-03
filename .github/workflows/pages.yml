@@ -36,6 +36,8 @@ jobs:
           npm run build
         env:
           API_BASE_URL: https://healthsnap-5stc.onrender.com
+          PUBLIC_URL: 
+          NODE_ENV: production
           
       - name: Verify build output
         run: |
