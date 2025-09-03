@@ -28,12 +28,19 @@ import { User } from './users/entities/user.entity';
           };
         } else {
           // 개발/로컬: SQLite
+          const dbPath = process.env.NODE_ENV === 'production' 
+            ? '/tmp/health-checkup.db'  // Render에서 쓰기 가능한 경로
+            : 'health-checkup.db';
+            
+          console.log(`🗄️ Using SQLite database at: ${dbPath}`);
+          
           return {
             type: 'sqlite',
-            database: 'health-checkup.db',
+            database: dbPath,
             entities: [HealthCheckup, User],
             synchronize: true, // 개발환경에서만 true
             logging: process.env.NODE_ENV === 'development',
+            dropSchema: false, // 데이터 손실 방지
           };
         }
       },

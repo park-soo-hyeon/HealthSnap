@@ -31,7 +31,10 @@ export class AuthService {
 
   async register(registerDto: RegisterDto): Promise<AuthResponse> {
     try {
+      console.log('🔐 Starting user registration for:', registerDto.email);
+      
       const user = await this.usersService.create(registerDto);
+      console.log('✅ User created successfully:', user.id);
       
       // JWT 토큰 생성
       const payload: JwtPayload = {
@@ -40,8 +43,11 @@ export class AuthService {
         name: user.name,
       };
 
+      const token = this.jwtService.sign(payload);
+      console.log('✅ JWT token generated successfully');
+
       return {
-        access_token: this.jwtService.sign(payload),
+        access_token: token,
         user: {
           id: user.id,
           email: user.email,
@@ -52,9 +58,18 @@ export class AuthService {
         },
       };
     } catch (error) {
+      console.error('❌ Registration error details:', error);
+      console.error('❌ Error stack:', error.stack);
+      
       if (error instanceof ConflictException) {
         throw error;
       }
+      
+      // 더 구체적인 에러 메시지 제공
+      if (error.message) {
+        throw new Error(`회원가입 중 오류가 발생했습니다: ${error.message}`);
+      }
+      
       throw new Error('회원가입 중 오류가 발생했습니다.');
     }
   }
