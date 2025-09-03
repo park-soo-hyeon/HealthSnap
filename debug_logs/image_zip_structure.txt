@@ -1,0 +1,59 @@
+[outer zip] raw/양추정_이미지_VAL_0422_add_merged.zip
+inner zip count: 415
+first inner zips:
+  - image/갈비탕/Q1/Q1.zip
+  - image/갈비탕/Q2/Q2.zip
+  - image/갈비탕/Q3/Q3.zip
+  - image/갈비탕/Q4/Q4.zip
+  - image/갈비탕/Q5/Q5.zip
+  - image/갈치조림/Q1/Q1.zip
+  - image/갈치조림/Q2/Q2.zip
+  - image/갈치조림/Q3/Q3.zip
+  - image/갈치조림/Q4/Q4.zip
+  - image/갈치조림/Q5/Q5.zip
+
+--- INNER: image/갈비탕/Q1/Q1.zip ---
+total entries: 11 | images: 11
+top-level image dirs sample: 
+  img: side_건더기국류_뚝배기_갈비탕_Q1_00017.JPG
+  img: side_건더기국류_뚝배기_갈비탕_Q1_00029.JPG
+  img: side_건더기국류_뚝배기_갈비탕_Q1_00033.JPG
+  img: side_건더기국류_뚝배기_갈비탕_Q1_00042.JPG
+  img: side_건더기국류_뚝배기_갈비탕_Q1_00049.JPG
+  img: top_건더기국류_뚝배기_갈비탕_Q1_00003.JPG
+  img: top_건더기국류_뚝배기_갈비탕_Q1_00004.JPG
+  img: top_건더기국류_뚝배기_갈비탕_Q1_00015.JPG
+  img: top_건더기국류_뚝배기_갈비탕_Q1_00042.JPG
+  img: top_건더기국류_뚝배기_갈비탕_Q1_00045.JPG
+  img: top_건더기국류_뚝배기_갈비탕_Q1_00050.JPG
+
+--- INNER: image/갈비탕/Q2/Q2.zip ---
+total entries: 11 | images: 11
+top-level image dirs sample: 
+  img: side_건더기국류_뚝배기_갈비탕_Q2_00025.JPG
+  img: side_건더기국류_뚝배기_갈비탕_Q2_00030.JPG
+  img: side_건더기국류_뚝배기_갈비탕_Q2_00042.JPG
+  img: side_건더기국류_뚝배기_갈비탕_Q2_00044.JPG
+  img: side_건더기국류_뚝배기_갈비탕_Q2_00051.JPG
+  img: top_건더기국류_뚝배기_갈비탕_Q2_00009.JPG
+  img: top_건더기국류_뚝배기_갈비탕_Q2_00019.JPG
+  img: top_건더기국류_뚝배기_갈비탕_Q2_00024.JPG
+  img: top_건더기국류_뚝배기_갈비탕_Q2_00026.JPG
+  img: top_건더기국류_뚝배기_갈비탕_Q2_00027.JPG
+  img: top_건더기국류_뚝배기_갈비탕_Q2_00035.JPG
+
+--- INNER: image/갈비탕/Q3/Q3.zip ---
+total entries: 11 | images: 11
+top-level image dirs sample: 
+  img: side_건더기국류_뚝배기_갈비탕_Q3_00011.JPG
+  img: side_건더기국류_뚝배기_갈비탕_Q3_00017.JPG
+  img: side_건더기국류_뚝배기_갈비탕_Q3_00026.JPG
+  img: side_건더기국류_뚝배기_갈비탕_Q3_00032.JPG
+  img: side_건더기국류_뚝배기_갈비탕_Q3_00035.JPG
+  img: side_건더기국류_뚝배기_갈비탕_Q3_00042.JPG
+  img: side_건더기국류_뚝배기_갈비탕_Q3_00051.JPG
+  img: side_건더기국류_뚝배기_갈비탕_Q3_00053.JPG
+  img: top_건더기국류_뚝배기_갈비탕_Q3_00007.JPG
+  img: top_건더기국류_뚝배기_갈비탕_Q3_00030.JPG
+  img: top_건더기국류_뚝배기_갈비탕_Q3_00038.JPG
+
