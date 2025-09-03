@@ -289,7 +289,7 @@ const Mypage = () => {
     useEffect(() => {
         const fetchHistoryData = async () => {
             try {
-                const response = await fetch('http://localhost:3000/Ai/history', {
+                const response = await fetch(`${process.env.API_BASE_URL || 'https://healthsnap-5stc.onrender.com'}/Ai/history`, {
                 headers: getAuthHeaders(),
             });
                 if (!response.ok) {

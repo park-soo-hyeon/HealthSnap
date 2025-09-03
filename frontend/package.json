@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
+  "homepage": "https://danto7632.github.io/HealthSnap",
   "scripts": {
     "build": "rsbuild build",
     "dev": "rsbuild dev --port 5173",

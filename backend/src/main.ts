@@ -8,7 +8,15 @@ async function bootstrap() {
 
   // CORS 설정
   app.enableCors({
-    origin: ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:8080'],
+    origin: [
+      // 개발 환경
+      'http://localhost:3000', 
+      'http://localhost:5173', 
+      'http://localhost:8080',
+      // 프로덕션: GitHub Pages
+      'https://danto7632.github.io',
+      'https://danto7632.github.io/HealthSnap', // GH Pages 프로젝트 경로
+    ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
@@ -53,11 +61,13 @@ async function bootstrap() {
   // app.setGlobalPrefix('api/v1');
 
   const port = process.env.PORT || 3000;
-  await app.listen(port);
+  await app.listen(port, '0.0.0.0'); // Render 호환성을 위해 0.0.0.0 바인딩
 
-  console.log(`🚀 Application is running on: http://localhost:${port}`);
-  console.log(`📚 Swagger documentation: http://localhost:${port}/api-docs`);
-  console.log(`🏥 Health Checkup API: http://localhost:${port}/api/v1/health-checkups`);
+  console.log(`🚀 Application is running on: http://0.0.0.0:${port}`);
+  console.log(`📚 Swagger documentation: http://0.0.0.0:${port}/api-docs`);
+  console.log(`🏥 Health Checkup API: http://0.0.0.0:${port}/api/v1/health-checkups`);
+  console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`🗄️ Database: ${process.env.DATABASE_URL ? 'PostgreSQL (Production)' : 'SQLite (Development)'}`);
 }
 
 bootstrap();
