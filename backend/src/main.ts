@@ -6,6 +6,20 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  // 필수 환경변수 체크
+  const requiredEnvVars = ['JWT_SECRET', 'GEMINI_API_KEY'];
+  const missingEnvVars = requiredEnvVars.filter(envVar => !process.env[envVar]);
+  
+  if (missingEnvVars.length > 0) {
+    console.error('❌ Missing required environment variables:', missingEnvVars);
+    console.error('❌ Please set these variables in Render dashboard');
+    process.exit(1);
+  }
+  
+  console.log('✅ All required environment variables are set');
+  console.log('🌍 Environment:', process.env.NODE_ENV || 'development');
+  console.log('🗄️ Database:', process.env.DATABASE_URL ? 'PostgreSQL' : 'SQLite');
+
   // CORS 설정
   app.enableCors({
     origin: [
