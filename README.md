@@ -29,24 +29,6 @@
 
 ---
 
-## 🚀 배포 구성
-
-### 🌐 **무료 플랫폼 구성**
-
-| 구성 요소 | 플랫폼 | 비용 | 특징 |
-|-----------|--------|------|------|
-| **🌐 Frontend** | GitHub Pages | 무료 | 자동 배포, 커스텀 도메인 |
-| **🔧 Backend API** | Render Free | 무료 | 15분 슬립, 자동 배포 |
-| **🗄️ Database** | Neon Free | 무료 | Serverless PostgreSQL |
-
-### ⚠️ **무료 플랜 제한사항**
-
-- **Render**: 15분 비활성 시 슬립 → 첫 요청 시 30초 지연
-- **Neon**: 5분 비활성 시 scale-to-zero → 첫 쿼리 시 웜업
-- **결론**: 24시간 접근 가능하지만 처음 호출은 다소 느릴 수 있음
-
----
-
 ## 👥 개발팀
 
 | 역할 | 개발자 | 담당 업무 |
@@ -313,7 +295,21 @@ bibimbab,비빔밥,450.0,567.2,89.4,18.9,15.2,1205.3
 - **서비스 분기**: 로그인/비로그인 사용자별 차별화된 서비스 제공
 
 ---
+## 🚀 배포 구성
 
+| 구성 요소 | 플랫폼 | 비용 | 특징 |
+|-----------|--------|------|------|
+| **🌐 Frontend** | GitHub Pages | 무료 | 자동 배포, 커스텀 도메인 |
+| **🔧 Backend API** | Render Free | 무료 | 15분 슬립, 자동 배포 |
+| **🗄️ Database** | Neon Free | 무료 | Serverless PostgreSQL |
+
+### ⚠️ **무료 플랜 제한사항**
+
+- **Render**: 15분 비활성 시 슬립 → 첫 요청 시 30초 지연
+- **Neon**: 5분 비활성 시 scale-to-zero → 첫 쿼리 시 웜업
+- **결론**: 24시간 접근 가능하지만 처음 호출은 다소 느릴 수 있음
+
+---
 ## 🎯 핵심 성과
 
 ### 📊 데이터 처리
@@ -337,14 +333,6 @@ bibimbab,비빔밥,450.0,567.2,89.4,18.9,15.2,1205.3
 
 <div align="center">
   <h3>🎯 5분 만에 AI 건강 분석, 지금 시작하세요!</h3>
-  
-  <br/>
-  
-  [![Live Demo](https://img.shields.io/badge/🌐_LIVE_DEMO-지금_체험하기-00C851?style=for-the-badge&logo=globe&logoColor=white)](https://health-snap.kro.kr/)
-  
-  **🔗 [https://health-snap.kro.kr/](https://health-snap.kro.kr/)**
-  
-  <br/>
   
   <em>✨ 완전 무료로 24시간 언제든 이용 가능합니다!</em>
 </div>
