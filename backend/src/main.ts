@@ -16,11 +16,14 @@ async function bootstrap() {
       // 프로덕션: GitHub Pages
       'https://danto7632.github.io',
       'https://danto7632.github.io/HealthSnap', // GH Pages 프로젝트 경로
-      // 프로덕션: 커스텀 도메인
+      // 프로덕션: 커스텀 도메인 (HTTPS)
       'https://health-snap.kro.kr',
+      // 프로덕션: 커스텀 도메인 (HTTP - 임시 허용)
+      'http://health-snap.kro.kr',
     ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
   });
 
   // Global validation pipe 설정
