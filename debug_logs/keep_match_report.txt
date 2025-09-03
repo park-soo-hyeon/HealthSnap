@@ -1,6 +1,0 @@
-[outer zip] raw/양추정_이미지_VAL_0422_add_merged.zip
-KEEP size: 300
-sample inner zips: 5 / 415 total
-total_imgs(sample): 55
-matched KEEP classes (sample): 0
-matched sample list: 

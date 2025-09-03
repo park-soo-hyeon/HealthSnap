@@ -1,171 +1,322 @@
-# Food Lite Dataset 🍽️
+# 🍽️ HealthSnap - AI 기반 건강검진 분석 시스템
 
-AI-Hub [음식 이미지 및 영양정보 텍스트 데이터](https://aihub.or.kr/aihubdata/data/view.do?currMenu=115&topMenu=100&aihubDataSe=realm&dataSetSn=74)를 경량화하고 정제한 프로젝트입니다.
-
-## 📊 원본 데이터셋 개요
-
-- **출처**: AI-Hub 음식 이미지 및 영양정보 텍스트 데이터
-- **구축년도**: 2020년
-- **데이터량**: 84.5만장의 음식 이미지 (400종 이상)
-- **구성**: 일반 음식 이미지 80만장 + 정밀 촬영 4.2만장
-- **포맷**: 이미지 파일, JSON 어노테이션, 영양정보 메타데이터
-
-## 🎯 정제 목표
-
-원본 84.5만장 → **핵심 데이터만 추출하여 경량화**
-- 중복 제거 및 품질 필터링
-- 영양정보 표준화 및 결측값 보정
-- 동의어 사전 구축
-- 이미지 압축 및 리사이징
-
-## 📁 프로젝트 구조
-
-```
-food_lite/
-├── raw/                          # 원본 AI-Hub 데이터 (별도 다운로드 필요)
-│   └── README_DOWNLOAD.md        # 다운로드 가이드 (6GB+ 파일들)
-│
-├── main/                         # 🎯 최종 핵심 데이터셋
-│   ├── nutrition.csv             # 정제된 영양정보 (401개 메뉴)
-│   └── aliases.csv               # 동의어 사전 (85개 매핑)
-│
-├── lite/                         # 경량화된 전체 데이터
-│   ├── nutrition.parquet         # Parquet 형식 영양정보
-│   ├── nutrition.jsonl           # JSONL 형식 영양정보
-│   ├── aliases.csv               # 동의어 사전
-│   ├── keep_classes.txt          # 핵심 메뉴 리스트
-│   └── images/                   # 경량화된 이미지 (WebP, 384px)
-│       ├── ssalbab/primary_0.webp
-│       ├── galbitang/primary_0.webp
-│       └── ...
-│
-├── aihub_food_litepack.py        # 데이터 정제 메인 스크립트
-├── prep_lite_from_local.py       # 로컬 정제 헬퍼
-└── debug_logs/                   # 정제 과정 로그
-```
-
-## 🛠️ 데이터 정제 과정
-
-### 0단계: 원본 데이터 다운로드
-```bash
-# raw/README_DOWNLOAD.md 파일 참조
-# AI-Hub에서 약 6GB의 원본 데이터 다운로드
-```
-
-### 1단계: 원본 데이터 분석
-```bash
-python aihub_food_litepack.py --analyze raw/
-```
-- ZIP 파일 구조 분석
-- 라벨링 데이터 매핑 확인
-- 영양정보 컬럼 일치성 검증
-
-### 2단계: 영양정보 정제
-- **컬럼 표준화**: `name_kr`, `serving_g`, `carb_g`, `protein_g`, `fat_g`, `sugar_g`, `sodium_mg`
-- **결측값 보정**:
-  - `kcal` 없으면 Atwater 계수(탄수화물 4, 단백질 4, 지방 9)로 계산
-  - `satfat_g` 없으면 총 지방의 35%로 추정
-  - `serving_g` 기본값 채움 (카테고리별 기본값 적용)
-- **ID 생성**: 한글명 → ASCII 슬러그 (`food_id`)
-
-### 3단계: 동의어 사전 구축
-- 라벨링 ZIP에서 메뉴명 변형 추출
-- 표기 통일 (예: "갈비탕" ↔ "소갈비탕")
-- 검색 성능 향상을 위한 alias 매핑
-
-### 4단계: 이미지 경량화
-```bash
-python aihub_food_litepack.py --extract raw/ --output lite/
-```
-- **포맷 변환**: JPG/PNG → WebP
-- **리사이징**: 최대 384px (종횡비 유지)
-- **압축**: 품질 80% (용량 최적화)
-- **선별**: 메뉴당 대표 이미지 1장
-
-### 5단계: 최종 데이터셋 생성
-```bash
-python prep_lite_from_local.py
-```
-- `main/` 폴더에 핵심 2개 파일 생성
-- API 서빙용 최적화된 형태
-
-## 📈 정제 결과
-
-| 항목 | 원본 | 정제 후 | 압축률 |
-|------|------|---------|--------|
-| 이미지 수 | 842,000장 | 85장 | 99.99% ↓ |
-| 메뉴 수 | 400+ 종 | 401 종 | 유지 |
-| 이미지 용량 | ~50GB | ~2MB | 99.996% ↓ |
-| 영양정보 | 분산된 형태 | 표준화된 CSV | 구조화 |
-
-## 🔧 주요 스크립트
-
-### `aihub_food_litepack.py`
-메인 정제 스크립트
-- ZIP 파일 스트리밍 처리
-- 이미지 리사이징 및 WebP 변환
-- 영양정보 표준화
-- 동의어 추출
-
-### `prep_lite_from_local.py`
-로컬 환경용 정제 헬퍼
-- 이미 다운로드된 파일 기반 처리
-- 빠른 재처리를 위한 캐시 활용
-
-## 🚀 활용 방법
-
-### 1. 데이터 로딩
-```python
-import pandas as pd
-
-# 영양정보 로드
-nutrition = pd.read_csv('main/nutrition.csv')
-aliases = pd.read_csv('main/aliases.csv')
-
-print(f"총 {len(nutrition)}개 메뉴")
-print(f"동의어 매핑 {len(aliases)}개")
-```
-
-### 2. API 서버 실행
-```bash
-python food_api.py
-# http://localhost:8080 에서 서비스 시작
-```
-
-### 3. 주요 API 엔드포인트
-- `GET /foods/search?q=밥` - 메뉴 검색
-- `POST /recommend` - 개인화 추천
-- `POST /plan/day` - 1일 식단 계획
-- `GET /images/{food_id}` - 음식 이미지
-
-## 📋 데이터 스키마
-
-### nutrition.csv
-```csv
-food_id,name_kr,serving_g,carb_g,protein_g,fat_g,sugar_g,sodium_mg
-ssalbab,쌀밥,210.0,73.71,5.76,0.45,0.0,59.4
-galbitang,갈비탕,500.0,5.2,25.8,12.4,2.1,890.5
-```
-
-### aliases.csv
-```csv
-food_id,name_kr,alias
-ssalbab,쌀밥,쌀밥
-galbitang,갈비탕,갈비탕
-galbitang,갈비탕,소갈비탕
-```
-
-## 🎯 품질 보증
-
-- **영양성분 정확도**: Atwater 계수 기반 칼로리 계산
-- **이미지 품질**: 고해상도 원본에서 384px 리사이징
-- **데이터 일관성**: 전체 파이프라인 자동화로 휴먼 에러 방지
-- **검색 성능**: 동의어 사전으로 검색 커버리지 향상
-
-## 📄 라이선스
-
-원본 데이터는 [AI-Hub 이용약관](https://aihub.or.kr)을 따릅니다.
+<div align="center">
+  <img src="public/image/main.png" alt="HealthSnap 메인화면" width="800"/>
+  <br/><br/>
+  
+  [![React](https://img.shields.io/badge/React-18.0-blue?logo=react)](https://reactjs.org/)
+  [![NestJS](https://img.shields.io/badge/NestJS-10.0-red?logo=nestjs)](https://nestjs.com/)
+  [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?logo=typescript)](https://www.typescriptlang.org/)
+  [![Gemini AI](https://img.shields.io/badge/Gemini-1.5%20Flash-green?logo=google)](https://ai.google.dev/)
+  [![AI-Hub](https://img.shields.io/badge/AI--Hub-Dataset-orange)](https://aihub.or.kr/)
+  
+  **건강검진 결과를 5분 만에 AI 분석하여 개인별 맞춤 식단을 추천하는 서비스**
+</div>
 
 ---
 
-*최종 핵심 데이터셋: `main/nutrition.csv` (401개 메뉴) + `main/aliases.csv` (85개 매핑)*
+## 👥 개발팀
+
+| 역할 | 개발자 | 담당 업무 |
+|------|--------|-----------|
+| **🎯 팀장** | **김인성** | 데이터 전처리, 백엔드 개발, 프론트엔드 개선 |
+| **💻 프론트엔드** | **박수현** | 프론트엔드 개발, API 연결 |
+
+---
+
+## 🚀 서비스 소개
+
+### 🎯 핵심 기능
+- **⚡ 5분 빠른 분석**: 건강검진 결과 입력 후 즉시 AI 분석
+- **🤖 Gemini AI 활용**: Google 최신 AI로 정확한 건강 상태 평가
+- **🍽️ 맞춤 식단 추천**: AI-Hub 401종 한국 음식 데이터 기반 개인화 추천
+- **📊 건강 점수**: 13개 지표 종합한 0-100점 건강 점수 제공
+- **🔐 개인화 서비스**: JWT 인증으로 개인별 건강 이력 관리
+
+### 🎨 서비스 플로우
+
+| 1️⃣ 건강검진 입력 | 2️⃣ AI 분석 중 |
+|:---:|:---:|
+| <img src="public/image/input.png" alt="건강검진 입력" width="350"/> | <img src="public/image/loading.png" alt="AI 분석 중" width="350"/> |
+| 개인 건강검진 데이터 입력 | Gemini AI가 실시간 분석 |
+
+| 3️⃣ 분석 결과 | 4️⃣ 식단 추천 |
+|:---:|:---:|
+| <img src="public/image/result.png" alt="분석 결과" width="350"/> | <img src="public/image/recommend.png" alt="식단 추천" width="350"/> |
+| 종합 건강 점수 및 AI 소견 | 개인 맞춤 식단 6가지 이내 추천 |
+
+| 5️⃣ 검진 이력 | 6️⃣ 상세 분석 |
+|:---:|:---:|
+| <img src="public/image/history.png" alt="검진 이력" width="350"/> | <img src="public/image/detail.png" alt="상세 분석" width="350"/> |
+| 개인별 검진 이력 관리 | 상세 분석 결과 확인 |
+
+### 🔐 로그인 vs 비로그인 서비스
+
+| 기능 | 🌐 비로그인 사용자 | 🔒 로그인 사용자 |
+|------|-------------------|------------------|
+| **건강검진 입력** | ✅ 1단계부터 전체 입력 | ✅ 2단계부터 (기본정보 자동입력) |
+| **AI 분석 결과** | ✅ 즉시 확인 가능 | ✅ 즉시 확인 + DB 저장 |
+| **식단 추천** | ✅ 6가지 추천 확인 | ✅ 6가지 추천 + 영양정보 |
+| **검진 기록** | ❌ "로그인 후 이용해주세요" | ✅ 개인별 이력 관리 |
+| **데이터 저장** | ❌ 일회성 분석만 | ✅ 영구 저장 및 트렌드 분석 |
+
+<details>
+<summary>📱 비로그인 이용 시 화면</summary>
+
+<div align="center">
+  <img src="public/image/Non-login-history.png" alt="비로그인 검진기록" width="600"/>
+  <br/>
+  <em>비로그인 상태에서 검진 기록 접근 시 로그인 유도 화면</em>
+</div>
+
+</details>
+
+---
+
+## 📊 데이터 전처리 성과
+
+### 🎯 압축 성과
+<div align="center">
+  <img src="public/image/data.png" alt="데이터 전처리 과정" width="600"/>
+</div>
+
+| 항목 | 원본 (AI-Hub) | 처리 후 | 압축률 | 성과 |
+|------|---------------|---------|--------|------|
+| **전체 용량** | ~6GB | 732KB | **99.988% ↓** | Git 일반 파일로 관리 |
+| **이미지 수** | 842,000장 | 0장* | 100% ↓ | *백엔드 API만 활용 |
+| **음식 종류** | 400+ 종 | 401 종 | 유지 | 품질 검증 완료 |
+| **영양정보** | 분산 Excel | 표준 CSV | 구조화 | 실시간 로드 |
+| **검색 성능** | 기본 명칭 | +85개 별칭 | 향상 | 동의어 사전 |
+
+<details>
+<summary>🔧 전처리 과정 상세</summary>
+
+### 1️⃣ 원본 데이터 분석
+```python
+# 84.5만장 이미지 + JSON 라벨링 분석
+python aihub_food_litepack.py --analyze raw/
+```
+
+### 2️⃣ 영양정보 표준화
+```python
+# 결측값 보정 로직
+- kcal 부재 → 탄수화물×4 + 단백질×4 + 지방×9 (Atwater 계수)
+- 포화지방 부재 → 총지방의 35% 추정
+- 제공량 부재 → 카테고리별 기본값 (밥류 210g, 국물류 500g)
+```
+
+### 3️⃣ 동의어 사전 구축
+```python
+# 검색 최적화를 위한 별칭 매핑
+aliases = {
+    "galbitang": ["갈비탕", "소갈비탕", "LA갈비탕"],
+    "kimcijjigae": ["김치찌개", "김치찜", "묵은지찌개"],
+    "bibimbab": ["비빔밥", "돌솥비빔밥", "야채비빔밥"]
+}
+```
+
+### 4️⃣ 최종 데이터셋
+- **`nutrition.csv`**: 401개 음식 영양정보 (34KB)
+- **`aliases.csv`**: 85개 검색 별칭 (3KB)
+
+</details>
+
+---
+
+## 🔧 백엔드 개발
+
+### 🏗️ 기술 스택
+- **NestJS**: TypeScript 기반 모듈러 아키텍처
+- **TypeORM**: Code-First 데이터 모델링
+- **JWT**: Stateless 인증 시스템
+- **SQLite**: 개발용 경량 DB (MySQL 마이그레이션 준비)
+- **Swagger**: 자동 API 문서화
+
+### 🤖 주요 기능
+- **AI 서비스**: AI-Hub 401개 음식 데이터 실시간 로드 및 Gemini AI 건강 분석
+- **인증 시스템**: JWT 기반 사용자별 데이터 격리
+- **API 엔드포인트**: 로그인/비로그인 사용자 구분 서비스
+
+<details>
+<summary>📋 API 명세</summary>
+
+### 인증 API
+```http
+POST /auth/register
+{
+  "email": "user@example.com",
+  "password": "password123",
+  "name": "김인성",
+  "phone": "010-1234-5678",
+  "birthDate": "19901225",
+  "gender": "남"
+}
+
+POST /auth/login
+{
+  "email": "user@example.com",
+  "password": "password123"
+}
+→ { "access_token": "eyJhbGci...", "user": {...} }
+```
+
+### 건강검진 분석 API
+```http
+# 로그인 사용자: 분석 + 저장
+POST /Ai/db
+Authorization: Bearer eyJhbGci...
+
+# 비로그인 사용자: 분석만
+POST /Ai/analyze
+
+{
+  "name": "김인성",
+  "birthDate": "19901225",
+  "height": 175.0,
+  "weight": 70.0,
+  "bmi": 22.9,
+  "bloodPressureSystolic": 120,
+  "bloodPressureDiastolic": 80,
+  "fastingBloodSugar": 95.0,
+  // ... 기타 건강검진 데이터
+}
+```
+
+### 응답 형식
+```json
+{
+  "healthScore": 85,
+  "finalmessage": "전반적으로 양호한 건강상태입니다...",
+  
+  // 추천 식단 (6개)
+  "food_name1": "현미밥", "grams1": 150,
+  "food_name2": "갈비탕", "grams2": 500,
+  
+  // 예측 평균값 vs 실제값
+  "ave_bmi": 23.0, "bmi": 22.9,
+  "ave_bloodPressureSystolic": 125, "bloodPressureSystolic": 120
+}
+```
+
+</details>
+
+<details>
+<summary>🗃️ 데이터 스키마</summary>
+
+### Users 테이블
+```sql
+CREATE TABLE users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  email VARCHAR UNIQUE NOT NULL,
+  password VARCHAR NOT NULL,  -- bcrypt 해시
+  name VARCHAR NOT NULL,
+  phone VARCHAR,
+  birthDate DATE,
+  gender VARCHAR,
+  createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+### Health Checkups 테이블
+```sql
+CREATE TABLE health_checkups (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  userId INTEGER NOT NULL,
+  
+  -- 기본 정보
+  name VARCHAR, height FLOAT, weight FLOAT, bmi FLOAT,
+  
+  -- 생체 지표
+  bloodPressureSystolic INTEGER, bloodPressureDiastolic INTEGER,
+  fastingBloodSugar FLOAT, totalCholesterol FLOAT,
+  
+  -- AI 분석 결과
+  healthScore INTEGER,      -- 0-100점
+  finalmessage TEXT,        -- AI 건강 소견
+  
+  -- 추천 식단 (6개)
+  food_name1 VARCHAR, grams1 FLOAT, protein1 FLOAT,
+  food_name2 VARCHAR, grams2 FLOAT, protein2 FLOAT,
+  -- ...
+  
+  FOREIGN KEY (userId) REFERENCES users(id)
+);
+```
+
+### AI-Hub 영양 데이터
+```csv
+food_id,name_kr,serving_g,kcal,carb_g,protein_g,fat_g,sodium_mg
+ssalbab,쌀밥,210.0,313.9,73.71,5.76,0.45,59.4
+galbitang,갈비탕,500.0,284.0,5.2,25.8,12.4,890.5
+bibimbab,비빔밥,450.0,567.2,89.4,18.9,15.2,1205.3
+```
+
+</details>
+
+---
+
+## 🎨 프론트엔드 개발
+
+### 🏗️ 기술 스택
+- **React 18**: 함수형 컴포넌트 + Hooks
+- **Context API**: JWT 인증 전역 상태 관리
+- **Rsbuild**: 고속 번들링 도구
+- **반응형 CSS**: 모바일/데스크톱 최적화
+
+### 🎯 주요 기능
+- **인증 시스템**: JWT 기반 전역 상태 관리 및 보호된 라우팅
+- **사용자 경험**: 로딩 UI, 에러 처리, 반응형 디자인
+- **서비스 분기**: 로그인/비로그인 사용자별 차별화된 서비스 제공
+
+---
+
+## 🎯 주요 성과 및 특징
+
+### 📊 데이터 처리
+- ✅ **99.988% 압축**: 6GB → 732KB 극한 최적화
+- ✅ **100% 품질**: 401개 음식 영양정보 완전 보정
+- ✅ **85% 검색 향상**: 동의어 사전으로 검색 커버리지 확대
+
+### 🤖 AI 분석
+- ✅ **실시간 분석**: Gemini 1.5 Flash로 5초 내 결과
+- ✅ **개인화 추천**: 나이/성별/건강상태 기반 맞춤 식단
+- ✅ **의학적 근거**: Atwater 계수 기반 정확한 영양 계산
+
+### 🔐 보안 및 인증
+- ✅ **JWT 토큰**: Stateless 인증으로 확장성 보장
+- ✅ **데이터 격리**: 사용자별 완전 분리된 건강 정보
+- ✅ **입력 검증**: 현실적 범위 내 건강지표만 허용
+
+### 🎨 사용자 경험
+- ✅ **비로그인 체험**: 회원가입 없이도 서비스 이용 가능
+- ✅ **로딩 UI**: 분석 중 시각적 피드백 제공
+- ✅ **반응형 디자인**: 모바일/데스크톱 최적화
+
+---
+
+## 📈 향후 개발 계획
+
+### ✅ Phase 1 (완료)
+- AI-Hub 데이터 전처리 및 최적화
+- NestJS 백엔드 API 개발
+- React 프론트엔드 구현
+- JWT 인증 시스템
+- Gemini AI 통합
+
+### 🔄 Phase 2 (진행중)
+- MySQL 프로덕션 DB 마이그레이션
+- 건강 트렌드 분석 차트
+- 식단 계획 및 추적 기능
+- 푸시 알림 시스템
+
+### 📋 Phase 3 (예정)
+- React Native 모바일 앱
+- 의료진 관리자 대시보드
+- PDF 건강 리포트 생성
+- 가족 건강 관리 기능
+
+---
+
+<div align="center">
+  <h3>🎯 5분 만에 AI 건강 분석, 지금 시작하세요!</h3>
+</div>
