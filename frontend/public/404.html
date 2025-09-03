@@ -10,13 +10,14 @@
       // Single Page Apps for GitHub Pages
       // MIT License
       // https://github.com/rafgraph/spa-github-pages
+      
       // This script takes the current url and converts the path and query
       // string into just a query string, and then redirects the browser
       // to the new url with only a query string and hash fragment.
-      //
+      
       // e.g. https://www.foo.tld/one/two?a=b&c=d#qwe, becomes
       // https://www.foo.tld/?/one/two&a=b~and~c=d#qwe
-      //
+      
       // Note: this 404.html file must be at least 512 bytes for it to work
       // with Internet Explorer (it is currently > 512 bytes)
       
@@ -42,5 +43,31 @@
     <h1>HealthSnap</h1>
     <p>페이지를 찾을 수 없습니다. 잠시 후 자동으로 리다이렉트됩니다...</p>
     <p>If you are not redirected automatically, follow this <a href='?/'>link to example</a>.</p>
+    
+    <!-- 추가 스크립트로 리다이렉트 보장 -->
+    <script>
+      // 추가 안전장치: 3초 후에도 리다이렉트되지 않으면 강제 이동
+      setTimeout(function() {
+        var currentPath = window.location.pathname;
+        var basePath = '/HealthSnap';
+        
+        if (currentPath === basePath || currentPath === basePath + '/') {
+          // 이미 올바른 경로에 있음
+          return;
+        }
+        
+        // HealthSnap 경로로 리다이렉트
+        var targetUrl = basePath + '/';
+        if (currentPath.startsWith(basePath)) {
+          // HealthSnap 하위 경로인 경우
+          var subPath = currentPath.substring(basePath.length);
+          if (subPath && subPath !== '/') {
+            targetUrl = basePath + subPath;
+          }
+        }
+        
+        window.location.href = targetUrl;
+      }, 3000);
+    </script>
   </body>
 </html>
