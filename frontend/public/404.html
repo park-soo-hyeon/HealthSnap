@@ -3,71 +3,16 @@
   <head>
     <meta charset="utf-8">
     <title>HealthSnap - Page Not Found</title>
-    <script type="text/javascript">
-      // SPA GitHub Pages 404 해결
-      // https://github.com/rafgraph/spa-github-pages
-      
-      // Single Page Apps for GitHub Pages
-      // MIT License
-      // https://github.com/rafgraph/spa-github-pages
-      
-      // This script takes the current url and converts the path and query
-      // string into just a query string, and then redirects the browser
-      // to the new url with only a query string and hash fragment.
-      
-      // e.g. https://www.foo.tld/one/two?a=b&c=d#qwe, becomes
-      // https://www.foo.tld/?/one/two&a=b~and~c=d#qwe
-      
-      // Note: this 404.html file must be at least 512 bytes for it to work
-      // with Internet Explorer (it is currently > 512 bytes)
-      
-      // If you're creating a Project Pages site and NOT using a custom domain,
-      // then set pathSegmentsToKeep to 1 (enterprise users may need to set it to > 1).
-      // This is because Project Pages are served from subdirectories of the main github.io domain.
-      // For example, if your repo is at https://github.com/username/project-name,
-      // then your Project Pages site will be served from https://username.github.io/project-name/.
-      // If you have a custom domain, then you can set pathSegmentsToKeep to 0.
-      var pathSegmentsToKeep = 1;
-      
-      var l = window.location;
-      l.replace(
-        l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
-        l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?/' +
-        l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
-        (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
-        l.hash
-      );
-    </script>
+    <meta http-equiv="refresh" content="0;url=/#/">
   </head>
   <body>
     <h1>HealthSnap</h1>
-    <p>페이지를 찾을 수 없습니다. 잠시 후 자동으로 리다이렉트됩니다...</p>
-    <p>If you are not redirected automatically, follow this <a href='?/'>link to example</a>.</p>
+    <p>페이지를 찾을 수 없습니다. 메인 페이지로 리다이렉트됩니다...</p>
+    <p>If you are not redirected automatically, <a href='/#/'>click here</a>.</p>
     
-    <!-- 추가 스크립트로 리다이렉트 보장 -->
     <script>
-      // 추가 안전장치: 3초 후에도 리다이렉트되지 않으면 강제 이동
-      setTimeout(function() {
-        var currentPath = window.location.pathname;
-        var basePath = '/HealthSnap';
-        
-        if (currentPath === basePath || currentPath === basePath + '/') {
-          // 이미 올바른 경로에 있음
-          return;
-        }
-        
-        // HealthSnap 경로로 리다이렉트
-        var targetUrl = basePath + '/';
-        if (currentPath.startsWith(basePath)) {
-          // HealthSnap 하위 경로인 경우
-          var subPath = currentPath.substring(basePath.length);
-          if (subPath && subPath !== '/') {
-            targetUrl = basePath + subPath;
-          }
-        }
-        
-        window.location.href = targetUrl;
-      }, 3000);
+      // HashRouter를 사용하므로 간단한 리다이렉트
+      window.location.href = '/#/';
     </script>
   </body>
 </html>

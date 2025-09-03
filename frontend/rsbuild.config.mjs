@@ -8,24 +8,18 @@ export default defineConfig({
     open: false,
   },
   output: {
-    // GitHub Pages 서브패스 배포를 위한 설정
-    assetPrefix: '/HealthSnap/',
-    // 정적 파일 경로 설정
+    // HashRouter 사용으로 단순화
     distPath: {
       root: 'dist',
       js: 'assets/js',
       css: 'assets/css',
       media: 'assets/media',
     },
-    // HTML 파일의 base 태그 자동 설정
-    injectStyles: true,
-    injectScripts: true,
   },
   // 환경변수 주입
   source: {
     define: {
       'process.env.API_BASE_URL': JSON.stringify(process.env.API_BASE_URL || 'https://healthsnap-5stc.onrender.com'),
-      'process.env.PUBLIC_URL': JSON.stringify('/HealthSnap'),
     },
   },
   // HTML 설정
