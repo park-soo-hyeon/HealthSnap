@@ -47,17 +47,17 @@
 
 | 1️⃣ 건강검진 입력 | 2️⃣ AI 분석 중 |
 |:---:|:---:|
-| <img src="public/image/input.png" alt="건강검진 입력" width="350"/> | <img src="public/image/loading.png" alt="AI 분석 중" width="350"/> |
+| <img src="public/image/input.png" alt="건강검진 입력" width="450"/> | <img src="public/image/loading.png" alt="AI 분석 중" width="450"/> |
 | 개인 건강검진 데이터 입력 | Gemini AI가 실시간 분석 |
 
 | 3️⃣ 분석 결과 | 4️⃣ 식단 추천 |
 |:---:|:---:|
-| <img src="public/image/result.png" alt="분석 결과" width="350"/> | <img src="public/image/recommend.png" alt="식단 추천" width="350"/> |
+| <img src="public/image/result.png" alt="분석 결과" width="450"/> | <img src="public/image/recommend.png" alt="식단 추천" width="450"/> |
 | 종합 건강 점수 및 AI 소견 | 개인 맞춤 식단 6가지 이내 추천 |
 
 | 5️⃣ 검진 이력 | 6️⃣ 상세 분석 |
 |:---:|:---:|
-| <img src="public/image/history.png" alt="검진 이력" width="350"/> | <img src="public/image/detail.png" alt="상세 분석" width="350"/> |
+| <img src="public/image/history.png" alt="검진 이력" width="450"/> | <img src="public/image/detail.png" alt="상세 분석" width="450"/> |
 | 개인별 검진 이력 관리 | 상세 분석 결과 확인 |
 
 ### 🔐 로그인 vs 비로그인 서비스
@@ -88,15 +88,17 @@
 ### 🎯 압축 성과
 <div align="center">
   <img src="public/image/data.png" alt="데이터 전처리 과정" width="600"/>
+  <br/><br/>
+  
+  | 항목 | 원본 (AI-Hub) | 처리 후 | 압축률 | 성과 |
+  |------|---------------|---------|--------|------|
+  | **전체 용량** | ~6GB | 732KB | **99.988% ↓** | Git 일반 파일로 관리 |
+  | **이미지 수** | 842,000장 | 0장* | 100% ↓ | *백엔드 API만 활용 |
+  | **음식 종류** | 400+ 종 | 401 종 | 유지 | 품질 검증 완료 |
+  | **영양정보** | 분산 Excel | 표준 CSV | 구조화 | 실시간 로드 |
+  | **검색 성능** | 기본 명칭 | +85개 별칭 | 향상 | 동의어 사전 |
+  
 </div>
-
-| 항목 | 원본 (AI-Hub) | 처리 후 | 압축률 | 성과 |
-|------|---------------|---------|--------|------|
-| **전체 용량** | ~6GB | 732KB | **99.988% ↓** | Git 일반 파일로 관리 |
-| **이미지 수** | 842,000장 | 0장* | 100% ↓ | *백엔드 API만 활용 |
-| **음식 종류** | 400+ 종 | 401 종 | 유지 | 품질 검증 완료 |
-| **영양정보** | 분산 Excel | 표준 CSV | 구조화 | 실시간 로드 |
-| **검색 성능** | 기본 명칭 | +85개 별칭 | 향상 | 동의어 사전 |
 
 <details>
 <summary>🔧 전처리 과정 상세</summary>
